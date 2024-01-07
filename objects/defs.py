@@ -91,3 +91,25 @@ def current_str_time():
 def current_full_obj_date():
     full_format_date = "%d.%m.%Y %H:%M:%S"
     return datetime.today().strptime(current_full_str_date(), full_format_date)
+
+
+# token
+def token_required(func):
+    # decorator factory which invoks update_wrapper() method and passes decorated function as an argument
+    @wraps(func)
+    def decorated(*args, **kwargs):
+        token = request.args.get('token')
+        if not token:
+            return jsonify({'Alert!': 'Token is missing!'}), 401
+
+        try:
+
+            data = jwt.decode(token, apps.config['SECRET_KEY'])
+        # You can use the JWT errors in exception
+        # except jwt.InvalidTokenError:
+        #     return 'Invalid token. Please log in again.'
+        except:
+            return jsonify({'Message': 'Invalid token'}), 403
+        return func(*args, **kwargs)
+
+    return decorated
