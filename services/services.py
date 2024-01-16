@@ -8,7 +8,7 @@ index = Blueprint('/', __name__)
 def index_func():
     # vars
     if not session.get('logged_in'):
-        return render_template('pages/samples/login.html')
+        return render_template('pages/samples/register.html')
     else:
         return 'logged in currently'
 
@@ -34,7 +34,7 @@ def login():
 
         token = jwt.encode({
             'user': request.form['username'],
-            # don't foget to wrap it in str function, otherwise it won't work [ i struggled with this one! ]
+            # don't forget to wrap it in str function, otherwise it won't work [ I struggled with this one! ]
             'expiration': str(datetime.utcnow() + timedelta(seconds=60))
         },
             apps.config['SECRET_KEY'])

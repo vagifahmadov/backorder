@@ -15,7 +15,7 @@ import jwt
 from functools import wraps
 
 
-apps = Flask(__name__, static_folder='static', template_folder='templates')
+apps = Flask(__name__, static_folder='../static', template_folder='../templates')
 
 apps.config['SECRET_KEY'] = '33ea2029167f8abca5f0e95869860a93c74385b8'
 
