@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, Blueprint, make_response, url_for, render_template, session
+from flask import Flask, jsonify, request, Blueprint, make_response, url_for, render_template, session, redirect
 from flask_cors import CORS
 import requests, json, bson
 import calendar

@@ -100,16 +100,14 @@ def token_required(func):
     def decorated(*args, **kwargs):
         token = request.args.get('token')
         if not token:
-            return jsonify({'Alert!': 'Token is missing!'}), 401
-
+            return render_template('pages/samples/login.html', data={'message': 'Token is missing!', 'error': 401})
         try:
-
             data = jwt.decode(token, apps.config['SECRET_KEY'])
         # You can use the JWT errors in exception
         # except jwt.InvalidTokenError:
         #     return 'Invalid token. Please log in again.'
         except:
-            return jsonify({'Message': 'Invalid token'}), 403
+            return render_template('pages/samples/login.html', data={'message': 'Invalid token', 'error': 403})
         return func(*args, **kwargs)
 
     return decorated
