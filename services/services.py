@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 from setting.config import (request, Blueprint, jsonify, session, render_template,
                             jwt, make_response, timedelta, datetime, apps, redirect)
+=======
+from setting.config import request, Blueprint, jsonify, session, render_template, jwt, make_response, timedelta, datetime, apps, redirect
+>>>>>>> 6089a9c6 (08.06.2024)
 from objects.defs import token_required
 
 index = Blueprint('/', __name__)
@@ -18,7 +22,7 @@ def index_func():
 auth = Blueprint('/auth', __name__)
 
 
-@auth.route('/auth')
+@auth.route('/auth', methods=['GET'])
 @token_required
 def auth_func():
     return 'JWT is verified. Welcome to your dashboard !  '
@@ -29,6 +33,7 @@ def auth_func():
 login = Blueprint('/login', __name__)
 
 
+<<<<<<< HEAD
 @login.route('/login', methods=['POST', 'GET'])
 def login_func():
     if request.method == "POST":
@@ -46,6 +51,27 @@ def login_func():
             return redirect('/')
         else:
             return render_template('pages/samples/error.html', data={"message": "Unable to verify", 'error': 403})
+=======
+@login.route('/login', methods=['POST'])
+def login_func():
+    usr_nm = request.form['username']
+    passw = request.form['password']
+    if usr_nm and passw == '111':
+        session['logged_in'] = True
+        print(f'\n\n\n\nrequired: \t{usr_nm}|{passw}\n\n\n\n')
+        token = jwt.encode(
+            payload={
+                'user': request.form['username'],
+                # don't foget to wrap it in str function, otherwise it won't work [ i struggled with this one! ]
+                'expiration': str(datetime.utcnow() + timedelta(seconds=60))
+            },
+            key=apps.config['SECRET_KEY'],
+            algorithm="HS256"
+        )
+        session['token'] = token
+        print({'token': token})
+        return redirect('/')
+>>>>>>> 6089a9c6 (08.06.2024)
     else:
         return render_template("pages/samples/login.html")
 
@@ -55,10 +81,19 @@ def login_func():
 logout = Blueprint('/logout', __name__)
 
 
+<<<<<<< HEAD
 @logout.route('/logout', methods=['POST'])
 @token_required
 def logout_func():
     render_template("pages/samples/login.html")
+=======
+@logout.route('/logout', methods=['GET'])
+@token_required
+def logout_func():
+    session['token'] = False
+    session['logged_in'] = False
+    return redirect('/')
+>>>>>>> 6089a9c6 (08.06.2024)
 
 
 # your code goes here

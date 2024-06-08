@@ -98,11 +98,21 @@ def token_required(func):
     # decorator factory which invoks update_wrapper() method and passes decorated function as an argument
     @wraps(func)
     def decorated(*args, **kwargs):
-        token = request.args.get('token')
+        token = session['token']
         if not token:
+<<<<<<< HEAD
             return render_template('pages/samples/login.html', data={'message': 'Token is missing!', 'error': 401})
         try:
             data = jwt.decode(token, apps.config['SECRET_KEY'])
+=======
+            session['logged_in'] = False
+            print({'Alert!': 'Token is missing!'}, 401)
+            return redirect('/')
+        try:
+            print(f'try: \t{token}')
+            data = jwt.decode(jwt=token, key=apps.config['SECRET_KEY'], algorithms=["HS256"])
+            print(data)
+>>>>>>> 6089a9c6 (08.06.2024)
         # You can use the JWT errors in exception
         # except jwt.InvalidTokenError:
         #     return 'Invalid token. Please log in again.'
